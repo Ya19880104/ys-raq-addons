@@ -145,6 +145,27 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 本外掛完全支援 WooCommerce High-Performance Order Storage（HPOS）。
 
+## Changelog
+
+### 2.0.0 — 2026-03-13
+
+- 新增：報價歷史紀錄系統（CPT + WP_List_Table + 狀態管理 + 批次操作）
+- 新增：自訂表單欄位（9 種類型、拖曳排序、啟停用、必填控制）
+- 新增：原生欄位控制（Name / Email / Message 顯示與必填）
+- 新增：電子郵件增強（收件人管理、CC/BCC、自訂欄位附帶）
+- 新增：產品資訊顯示設定（圖片、價格、SKU、數量、小計、總計）
+- 新增：產品縮圖寬度設定（30-300px）
+- 新增：頁面按鈕控制（返回商店、更新清單）
+- 新增：電商工具箱共用選單
+- 變更：後台配色改為淺藍莫蘭迪色系
+- 變更：管理介面全面改版（卡片式佈局、分頁設定）
+
+### 1.0.0 — 2026-02-01
+
+- 新增：迷你詢價車 Widget（AJAX 刷新、響應式設計）
+- 新增：Shortcode 支援（`[ys_raq_mini_cart]`、`[ys_raq_count]`）
+- 新增：模板可覆寫
+
 ## 授權
 
 GPL-2.0+
