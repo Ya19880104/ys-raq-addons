@@ -1,0 +1,774 @@
+/**
+ * YS RAQ Addons - 後台管理樣式
+ * 配色與佈局對齊 YS 電商工具箱系列（淡藍色莫蘭迪色系）
+ */
+
+/* ── Settings Page ─────────────────────────────── */
+.ys-settings-wrap {
+	max-width: 1200px;
+	margin: 20px 20px 40px 2px;
+}
+
+/* ── Header ──────────────────────────────────── */
+.ys-settings-header {
+	background: linear-gradient(135deg, #8faabe 0%, #7b95aa 100%);
+	color: #fff;
+	padding: 30px 35px;
+	border-radius: 12px;
+	margin-bottom: 24px;
+	box-shadow: 0 4px 15px rgba(143, 170, 190, 0.3);
+}
+
+.ys-settings-header h2 {
+	color: #fff;
+	margin: 0 0 8px 0;
+	font-size: 26px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.ys-settings-header h2 .dashicons {
+	font-size: 30px;
+	width: 30px;
+	height: 30px;
+}
+
+.ys-settings-desc {
+	margin: 0;
+	opacity: 0.9;
+	font-size: 15px;
+}
+
+/* ── Tabs ─────────────────────────────────────── */
+.ys-settings-tabs {
+	border-bottom: 2px solid #d0dde6;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.ys-settings-tabs .nav-tab {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 12px 20px;
+	border: none;
+	background: #edf2f6;
+	margin-right: 4px;
+	border-radius: 8px 8px 0 0;
+	color: #7a8e9e;
+	font-weight: 500;
+	transition: all 0.2s;
+}
+
+.ys-settings-tabs .nav-tab:hover {
+	background: #e2eaf0;
+	color: #5a7080;
+}
+
+.ys-settings-tabs .nav-tab-active {
+	background: #fff;
+	color: #8faabe;
+	box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.ys-settings-tabs .nav-tab .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.ys-raq-badge {
+	display: inline-block;
+	background: #d63638;
+	color: #fff;
+	font-size: 10px;
+	line-height: 1;
+	padding: 2px 6px;
+	border-radius: 10px;
+	margin-left: 4px;
+	vertical-align: middle;
+}
+
+/* ── Form Wrapper ────────────────────────────── */
+.ys-settings-form {
+	background: #fff;
+	padding: 30px 35px;
+	border-radius: 0 0 12px 12px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.ys-settings-wrap > .ys-tab-content {
+	background: #fff;
+	padding: 30px 35px;
+	border-radius: 0 0 12px 12px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.ys-settings-wrap > .ys-tab-content[style*="display:none"],
+.ys-settings-wrap > .ys-tab-content[style*="display: none"] {
+	box-shadow: none;
+}
+
+/* ── Section Cards ────────────────────────────── */
+.ys-section-card {
+	background: #fff;
+	border: 1px solid #d0dde6;
+	border-radius: 10px;
+	padding: 24px;
+	margin-bottom: 20px;
+}
+
+.ys-section-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 15px 0;
+	padding-bottom: 12px;
+	border-bottom: 1px solid #d0dde6;
+	color: #5a7080;
+	font-size: 16px;
+}
+
+.ys-section-title .dashicons {
+	color: #8faabe;
+}
+
+.ys-section-desc {
+	color: #666;
+	margin: 0 0 15px 0;
+	padding: 12px 15px;
+	background: #f5f8fb;
+	border-left: 3px solid #8faabe;
+	border-radius: 0 6px 6px 0;
+}
+
+/* ── Toggle Switch ────────────────────────────── */
+.ys-toggle-switch {
+	position: relative;
+	display: inline-block;
+	width: 50px;
+	height: 26px;
+	vertical-align: middle;
+}
+
+.ys-toggle-switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.ys-toggle-slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #bcc8d0;
+	transition: 0.3s;
+	border-radius: 26px;
+}
+
+.ys-toggle-slider::before {
+	content: "";
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	left: 3px;
+	bottom: 3px;
+	background-color: #fff;
+	transition: 0.3s;
+	border-radius: 50%;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ys-toggle-switch input:checked + .ys-toggle-slider {
+	background-color: #8faabe;
+}
+
+.ys-toggle-switch input:checked + .ys-toggle-slider::before {
+	transform: translateX(24px);
+}
+
+.ys-toggle-small {
+	width: 40px;
+	height: 22px;
+}
+
+.ys-toggle-small .ys-toggle-slider::before {
+	height: 16px;
+	width: 16px;
+}
+
+.ys-toggle-small input:checked + .ys-toggle-slider::before {
+	transform: translateX(18px);
+}
+
+.ys-toggle-desc {
+	margin-left: 12px;
+	color: #666;
+	vertical-align: middle;
+}
+
+/* ── Form Table ───────────────────────────────── */
+.ys-settings-form .form-table {
+	margin: 0;
+}
+
+.ys-settings-form .form-table th {
+	padding: 15px 10px 15px 0;
+	width: 200px;
+	color: #1d2327;
+	font-weight: 500;
+	vertical-align: top;
+}
+
+.ys-settings-form .form-table td {
+	padding: 15px 10px;
+	vertical-align: top;
+}
+
+.ys-settings-form .form-table td p.description {
+	margin-top: 8px;
+	color: #646970;
+	font-style: italic;
+}
+
+.ys-settings-form .form-table input[type="text"],
+.ys-settings-form .form-table input[type="url"],
+.ys-settings-form .form-table input[type="password"],
+.ys-settings-form .form-table select {
+	width: 400px;
+	max-width: 100%;
+}
+
+.ys-settings-form .form-table .small-text {
+	max-width: 100px;
+}
+
+.ys-settings-form .form-table .description {
+	color: #646970;
+	font-style: normal;
+	margin-top: 6px;
+}
+
+/* ── Submit Button ────────────────────────────── */
+.ys-submit-wrap {
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 1px solid #d0dde6;
+}
+
+.ys-submit-wrap .button-primary {
+	background: #8faabe !important;
+	border-color: #7b95aa !important;
+	padding: 8px 30px;
+	height: auto;
+	font-size: 15px;
+}
+
+.ys-submit-wrap .button-primary:hover {
+	background: #7b95aa !important;
+	border-color: #6a8498 !important;
+}
+
+/* ── Fields Table ─────────────────────────────── */
+.ys-raq-fields-table {
+	border-collapse: collapse;
+}
+
+.ys-raq-fields-table th,
+.ys-raq-fields-table td {
+	padding: 10px 12px;
+	vertical-align: middle;
+}
+
+.ys-raq-fields-table tbody tr {
+	cursor: default;
+}
+
+.ys-raq-fields-table tbody tr:hover {
+	background: #f6f7f7;
+}
+
+.ys-raq-sort-handle {
+	cursor: move !important;
+}
+
+.ys-raq-fields-table code {
+	font-size: 11px;
+	color: #999;
+}
+
+/* ── Add Field Button ────────────────────────── */
+.ys-raq-add-field-btn {
+	margin-left: auto !important;
+}
+
+.ys-raq-add-field-btn .dashicons {
+	margin-right: 2px;
+}
+
+/* ── Modal ────────────────────────────────────── */
+.ys-raq-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ys-raq-modal-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.ys-raq-modal-content {
+	position: relative;
+	background: #fff;
+	border-radius: 12px;
+	width: 500px;
+	max-width: 90vw;
+	max-height: 80vh;
+	overflow-y: auto;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.ys-raq-modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 20px;
+	border-bottom: 1px solid #d0dde6;
+}
+
+.ys-raq-modal-header h3 {
+	margin: 0;
+	font-size: 16px;
+	color: #5a7080;
+}
+
+.ys-raq-modal-close {
+	background: none;
+	border: none;
+	font-size: 24px;
+	cursor: pointer;
+	color: #787c82;
+	line-height: 1;
+	padding: 0 4px;
+}
+
+.ys-raq-modal-close:hover {
+	color: #d63638;
+}
+
+.ys-raq-modal-body {
+	padding: 20px;
+}
+
+.ys-raq-modal-body label {
+	display: block;
+	font-weight: 500;
+	margin-bottom: 4px;
+}
+
+.ys-raq-modal-body .required {
+	color: #d63638;
+}
+
+.ys-raq-modal-body input[type="text"],
+.ys-raq-modal-body select,
+.ys-raq-modal-body textarea {
+	width: 100%;
+	max-width: 100%;
+}
+
+.ys-raq-modal-body .description {
+	color: #787c82;
+	font-size: 12px;
+	margin-top: 2px;
+}
+
+.ys-raq-modal-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	padding: 16px 20px;
+	border-top: 1px solid #d0dde6;
+	background: #f5f8fb;
+	border-radius: 0 0 12px 12px;
+}
+
+.ys-raq-modal-footer .button-primary {
+	background: #8faabe;
+	border-color: #7b95aa;
+}
+
+.ys-raq-modal-footer .button-primary:hover {
+	background: #7b95aa;
+	border-color: #6a8498;
+}
+
+/* ── Quotes Page ──────────────────────────────── */
+.ys-quotes-content {
+	background: #fff;
+	padding: 30px 35px;
+	border-radius: 12px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.ys-quotes-list-card {
+	padding: 0;
+	border: none;
+	background: transparent;
+}
+
+.ys-quotes-list-header {
+	padding: 0 0 15px;
+	border-bottom: 1px solid #d0dde6;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.ys-quotes-list-body {
+	padding: 0;
+}
+
+/* WP_List_Table 在報價列表頁面的增強 */
+.ys-quotes-list-body .wp-list-table {
+	border: 1px solid #d0dde6;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.ys-quotes-list-body .wp-list-table th {
+	background: #f5f8fb;
+}
+
+/* ── Quote Detail ─────────────────────────────── */
+.ys-quote-detail-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24px;
+	padding-bottom: 16px;
+	border-bottom: 2px solid #d0dde6;
+}
+
+.ys-quote-detail-header .ys-section-title {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 18px;
+}
+
+.ys-quote-detail-header .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: #f5f8fb;
+	border-color: #8faabe;
+	color: #5a7080;
+}
+
+.ys-quote-detail-header .button:hover {
+	background: #e2eaf0;
+	border-color: #7b95aa;
+	color: #3a5060;
+}
+
+.ys-quote-detail-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+	margin-bottom: 24px;
+}
+
+.ys-quote-info-card {
+	background: #f5f8fb;
+	padding: 24px;
+	border-radius: 10px;
+	border: 1px solid #d0dde6;
+}
+
+.ys-quote-info-card h4 {
+	margin: 0 0 16px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #d0dde6;
+	color: #5a7080;
+	font-size: 15px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.ys-quote-info-card p {
+	margin: 0 0 10px;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #1d2327;
+}
+
+.ys-quote-info-card p:last-child {
+	margin-bottom: 0;
+}
+
+.ys-quote-info-card p strong {
+	color: #50575e;
+}
+
+.ys-quote-info-card a {
+	color: #8faabe;
+}
+
+.ys-quote-info-card a:hover {
+	color: #6a8498;
+}
+
+.ys-quote-message {
+	background: #fff;
+	padding: 14px 16px;
+	border-radius: 8px;
+	border: 1px solid #d0dde6;
+	margin-top: 6px;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #1d2327;
+}
+
+/* ── Quote Products Table ─────────────────────── */
+.ys-quote-products {
+	margin-top: 0;
+}
+
+.ys-quote-products h4 {
+	color: #5a7080;
+	margin: 0 0 12px;
+	font-size: 15px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #d0dde6;
+}
+
+.ys-quote-products-table {
+	border: 1px solid #d0dde6 !important;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.ys-quote-products-table thead th {
+	background: #f5f8fb;
+	color: #50575e;
+	font-weight: 600;
+	font-size: 13px;
+	padding: 12px 16px;
+}
+
+.ys-quote-products-table tbody td {
+	padding: 12px 16px;
+	vertical-align: middle;
+	font-size: 14px;
+}
+
+.ys-quote-products-table tbody td a {
+	color: #8faabe;
+	font-weight: 500;
+}
+
+.ys-quote-products-table tbody td a:hover {
+	color: #6a8498;
+}
+
+.ys-quote-products-table .ys-col-image {
+	width: 60px;
+	text-align: center;
+}
+
+.ys-quote-products-table .ys-col-image img {
+	border-radius: 6px;
+	max-width: 48px;
+	height: auto;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ys-quote-products-table .ys-col-right {
+	text-align: right;
+}
+
+.ys-quote-products-table .ys-col-center {
+	text-align: center;
+}
+
+.ys-quote-products-table tfoot td {
+	padding: 14px 16px;
+	background: #f5f8fb;
+	font-size: 15px;
+}
+
+/* ── Status Select & Badge ───────────────────── */
+.ys-raq-status-badge {
+	display: inline-block;
+	white-space: nowrap;
+}
+
+.ys-raq-status-select {
+	padding: 6px 10px;
+	border: 1px solid #d0dde6;
+	border-radius: 6px;
+	background: #fff;
+	color: #1d2327;
+	font-size: 13px;
+}
+
+.ys-raq-status-select:focus {
+	border-color: #8faabe;
+	box-shadow: 0 0 0 1px #8faabe;
+	outline: none;
+}
+
+/* List table status quick-change dropdown */
+.ys-raq-list-status-select {
+	cursor: pointer;
+	background: #fff;
+	border-width: 2px;
+	border-style: solid;
+	transition: border-color 0.2s, color 0.2s;
+}
+
+.ys-raq-list-status-select:focus {
+	box-shadow: 0 0 0 1px currentColor;
+	outline: none;
+}
+
+.ys-raq-list-status-select.ys-status-saving {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+/* ── Column Widths in List Table ─────────────── */
+.ys-quotes-list-body .wp-list-table .column-customer {
+	min-width: 220px;
+}
+
+.ys-quotes-list-body .wp-list-table .column-products_count {
+	width: 70px;
+}
+
+.ys-quotes-list-body .wp-list-table .column-actions {
+	width: 160px;
+}
+
+.ys-raq-actions-inline {
+	display: flex;
+	gap: 4px;
+	align-items: center;
+	white-space: nowrap;
+}
+
+.ys-raq-actions-inline .button-small {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.ys-raq-actions-inline .button-small .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* ── Custom Fields Data in Detail ────────────── */
+.ys-quote-custom-fields {
+	margin-bottom: 24px;
+}
+
+/* ── Notice Items ─────────────────────────────── */
+.ys-notice-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 15px;
+	border-radius: 6px;
+	margin-bottom: 10px;
+}
+
+.ys-notice-success {
+	background: #e8f5e9;
+	color: #2e7d32;
+}
+
+.ys-notice-error {
+	background: #ffebee;
+	color: #c62828;
+}
+
+.ys-notice-info {
+	background: #e3f2fd;
+	color: #1565c0;
+}
+
+/* ── List Table Tweaks ────────────────────────── */
+.ys-raq-delete-btn:hover .dashicons {
+	color: #d63638 !important;
+}
+
+/* ── Required ─────────────────────────────────── */
+.ys-settings-wrap .required {
+	color: #c62828;
+}
+
+/* ── Native Field Required Control ───────────── */
+.ys-native-field-controls {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.ys-native-field-controls .ys-control-group {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+/* ── Responsive ───────────────────────────────── */
+@media screen and (max-width: 782px) {
+	.ys-settings-wrap {
+		margin: 10px 10px 20px 2px;
+	}
+
+	.ys-settings-header {
+		padding: 20px;
+	}
+
+	.ys-settings-header h2 {
+		font-size: 22px;
+	}
+
+	.ys-settings-form,
+	.ys-quotes-content,
+	.ys-settings-wrap > .ys-tab-content {
+		padding: 20px;
+	}
+
+	.ys-settings-form .form-table th {
+		width: auto;
+	}
+
+	.ys-raq-modal-content {
+		width: 95vw;
+	}
+
+	.ys-quote-detail-grid {
+		grid-template-columns: 1fr;
+	}
+}

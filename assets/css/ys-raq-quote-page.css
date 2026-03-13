@@ -1,0 +1,82 @@
+/**
+ * YS RAQ Addons - 報價頁面前端樣式
+ *
+ * 欄位隱藏和 actions flex 佈局由 PHP inline <style> 動態注入，
+ * 本檔案負責元件外觀樣式。
+ */
+
+/* ── Action Buttons ── */
+.ys-raq-actions-left,
+.ys-raq-actions-right {
+	flex-shrink: 0;
+}
+
+.ys-raq-back-to-shop {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	white-space: nowrap;
+}
+
+/* ── Custom Form Fields ───────────────────────── */
+.ys-raq-custom-field {
+	margin-bottom: 15px;
+}
+
+.ys-raq-custom-field label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: 500;
+}
+
+.ys-raq-custom-field .required {
+	color: #e2401c;
+}
+
+.ys-raq-custom-field input[type="text"],
+.ys-raq-custom-field input[type="email"],
+.ys-raq-custom-field input[type="tel"],
+.ys-raq-custom-field input[type="number"],
+.ys-raq-custom-field input[type="date"],
+.ys-raq-custom-field textarea,
+.ys-raq-custom-field select {
+	width: 100%;
+	max-width: 100%;
+	padding: 8px 12px;
+	border: 1px solid #d1d1d1;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.ys-raq-custom-field textarea {
+	resize: vertical;
+}
+
+.ys-raq-radio-label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.ys-raq-radio-label input[type="radio"] {
+	margin-right: 5px;
+}
+
+/* ── Back to Shop Fallback ── */
+.ys-raq-back-to-shop-fallback {
+	margin: 15px 0;
+}
+
+/* ── Responsive ───────────────────────────────── */
+@media screen and (max-width: 768px) {
+	#yith-ywrq-table-list td.actions {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	#yith-ywrq-table-list td.actions .button,
+	#yith-ywrq-table-list td.actions .ys-raq-back-to-shop {
+		text-align: center;
+	}
+}

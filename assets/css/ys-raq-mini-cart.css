@@ -1,0 +1,375 @@
+/**
+ * YS RAQ Mini Cart Styles
+ *
+ * @package YangSheep\RaqAddons
+ * @version 1.0.0
+ */
+
+/* ========================================
+   Widget 容器
+   ======================================== */
+.ys-raq-mini-cart-widget {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	z-index: 100;
+}
+
+.ys-raq-mini-cart-wrapper {
+	position: relative;
+}
+
+/* ========================================
+   觸發按鈕
+   ======================================== */
+.ys-raq-trigger {
+	display: block;
+	line-height: 1em !important;
+}
+
+.ys-raq-trigger-link {
+	display: inline-flex;
+	align-items: center;
+	color: #333;
+	font-size: 10px;
+	text-decoration: none;
+	cursor: pointer;
+	transition: border-color 0.2s, color 0.2s;
+}
+
+.ys-raq-trigger-link:hover {
+	color: #ff953c;
+	text-decoration: none;
+}
+
+.ys-raq-icon {
+	display: inline-flex;
+
+}
+
+.ys-raq-icon svg {
+	width: 25px;
+	height: 25px;
+}
+
+.ys-raq-count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 20px;
+	height: 20px;
+	padding: 0 5px;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	background: #666666;
+	border-radius: 10px;
+}
+
+.ys-raq-badge
+{
+	background: #464646;
+    border-radius: 20px;
+    width: 17px;
+    height: 17px;
+    color: #fff;
+    text-align: center;
+	margin-left: -9px;
+    margin-top: -5px;
+}
+
+.ys-raq-trigger-text {
+	font-size: 14px;
+}
+
+/* ========================================
+   下拉面板
+   ======================================== */
+.ys-raq-dropdown {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	width: 320px;
+	padding-top: 10px;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.25s ease, visibility 0.25s ease;
+	z-index: 9999;
+}
+
+.ys-raq-mini-cart-wrapper:hover .ys-raq-dropdown,
+.ys-raq-mini-cart-wrapper.ys-raq-open .ys-raq-dropdown {
+	opacity: 1;
+	visibility: visible;
+}
+
+/* 三角形箭頭 */
+.ys-raq-dropdown::before {
+	content: "";
+	position: absolute;
+	top: 2px;
+	right: 20px;
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-bottom: 8px solid #fff;
+	filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.06));
+}
+
+.ys-raq-dropdown-content {
+	background: #fff;
+	border-radius: 6px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+	padding: 16px;
+	max-height: 70vh;
+	overflow: hidden;
+}
+
+.ys-raq-dropdown-close {
+	display: none;
+	position: absolute;
+	top: 14px;
+	right: 10px;
+	width: 28px;
+	height: 28px;
+	line-height: 28px;
+	text-align: center;
+	font-size: 20px;
+	color: #999;
+	cursor: pointer;
+	z-index: 10;
+}
+
+/* ========================================
+   品項清單
+   ======================================== */
+.ys-raq-items-count {
+	margin: 0 0 10px;
+	padding-bottom: 8px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #555;
+	border-bottom: 1px solid #eee;
+}
+
+ul.ys-raq-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	max-height: 35vh;
+	overflow-y: auto;
+}
+
+ul.ys-raq-list::-webkit-scrollbar {
+	width: 5px;
+}
+
+ul.ys-raq-list::-webkit-scrollbar-thumb {
+	border-radius: 3px;
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+li.ys-raq-list-item {
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	padding: 10px 0 10px 22px;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+li.ys-raq-list-item:last-child {
+	border-bottom: none;
+}
+
+li.ys-raq-no-product {
+	padding: 15px 0;
+	text-align: center;
+	color: #999;
+	font-size: 13px;
+	list-style: none;
+}
+
+/* ========================================
+   移除按鈕
+   ======================================== */
+a.ys-raq-item-remove {
+	position: absolute;
+	top: 10px;
+	left: 0;
+	width: 18px;
+	height: 18px;
+	line-height: 16px;
+	text-align: center;
+	font-size: 16px;
+	font-weight: 700;
+	color: #cc0000;
+	text-decoration: none;
+	border-radius: 50%;
+	transition: background 0.15s, color 0.15s;
+}
+
+a.ys-raq-item-remove:hover {
+	background: #cc0000;
+	color: #fff;
+	text-decoration: none;
+}
+
+/* ========================================
+   產品縮圖
+   ======================================== */
+.ys-raq-item-thumb {
+	flex-shrink: 0;
+	width: 50px;
+}
+
+.ys-raq-item-thumb img {
+	width: 50px;
+	height: 50px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.ys-raq-item-thumb a {
+	display: block;
+	line-height: 0;
+}
+
+/* ========================================
+   產品資訊
+   ======================================== */
+.ys-raq-item-info {
+	flex: 1;
+	min-width: 0;
+}
+
+a.ys-raq-item-name {
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	color: #333;
+	text-decoration: none;
+	line-height: 1.3;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+a.ys-raq-item-name:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+.ys-raq-item-variations {
+	display: block;
+	margin-top: 2px;
+	font-size: 11px;
+	color: #888;
+	line-height: 1.4;
+}
+
+.ys-raq-item-qty-price {
+	display: block;
+	margin-top: 3px;
+	font-size: 12px;
+	color: #666;
+}
+
+/* ========================================
+   查看清單按鈕
+   ======================================== */
+a.ys-raq-view-list-btn {
+	display: block;
+	margin-top: 12px;
+	padding: 10px 16px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: 600;
+	color: #fff !important;
+	background: #333;
+	border: none;
+	border-radius: 4px;
+	text-decoration: none;
+	transition: background 0.2s;
+}
+
+a.ys-raq-view-list-btn:hover {
+	background: #555;
+	color: #fff !important;
+	text-decoration: none;
+}
+
+/* ========================================
+   Shortcode [ys_raq_count] 計數樣式
+   ======================================== */
+.ys-raq-count-shortcode {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+a.ys-raq-count-link {
+	text-decoration: none;
+}
+
+a.ys-raq-count-link:hover {
+	text-decoration: none;
+}
+
+/* ========================================
+   行動裝置
+   ======================================== */
+@media screen and (max-width: 768px) {
+	.ys-raq-dropdown {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 100%;
+		padding-top: 0;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 99999;
+	}
+
+	.ys-raq-dropdown::before {
+		display: none;
+	}
+
+	.ys-raq-dropdown-content {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		max-height: 75vh;
+		border-radius: 12px 12px 0 0;
+		padding: 20px 16px;
+		overflow-y: auto;
+	}
+
+	.ys-raq-dropdown-close {
+		display: block;
+	}
+
+	ul.ys-raq-list {
+		max-height: 50vh;
+	}
+
+	/* 行動裝置不用 hover 觸發，需要 JS toggle */
+	.ys-raq-mini-cart-wrapper:hover .ys-raq-dropdown {
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.ys-raq-mini-cart-wrapper.ys-raq-open .ys-raq-dropdown {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+/* 禁止 body 捲動（mobile 面板打開時） */
+body.ys-raq-body-locked {
+	overflow: hidden;
+}
