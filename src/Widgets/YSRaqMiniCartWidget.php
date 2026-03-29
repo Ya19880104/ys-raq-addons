@@ -168,7 +168,7 @@ class YSRaqMiniCartWidget extends \WP_Widget {
 			'title'             => __( '詢價清單', 'ys-raq-addons' ),
 			'item_name'         => __( '項商品', 'ys-raq-addons' ),
 			'item_plural_name'  => __( '項商品', 'ys-raq-addons' ),
-			'button_label'      => __( '查看詢價清單', 'ys-raq-addons' ),
+			'button_label'      => get_option( 'ys_raq_mini_cart_button_label', __( '查看詢價清單', 'ys-raq-addons' ) ),
 			'show_title_inside' => 0,
 			'show_thumbnail'    => 1,
 			'show_price'        => 1,

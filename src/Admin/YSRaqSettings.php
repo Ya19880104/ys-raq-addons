@@ -468,6 +468,25 @@ final class YSRaqSettings {
 				</tr>
 			</table>
 		</div>
+
+		<div class="ys-section-card">
+			<h3 class="ys-section-title">
+				<span class="dashicons dashicons-cart"></span> <?php esc_html_e( '迷你詢價車', 'ys-raq-addons' ); ?>
+			</h3>
+			<table class="form-table">
+				<tr>
+					<th scope="row">
+						<label for="ys_raq_mini_cart_button_label"><?php esc_html_e( '查看清單按鈕文字', 'ys-raq-addons' ); ?></label>
+					</th>
+					<td>
+						<input type="text" id="ys_raq_mini_cart_button_label" name="ys_raq_mini_cart_button_label"
+							value="<?php echo esc_attr( get_option( 'ys_raq_mini_cart_button_label', __( '查看詢價清單', 'ys-raq-addons' ) ) ); ?>"
+							class="regular-text" />
+						<p class="description"><?php esc_html_e( '迷你詢價車視窗底部的按鈕文字。', 'ys-raq-addons' ); ?></p>
+					</td>
+				</tr>
+			</table>
+		</div>
 		<?php
 	}
 
@@ -884,6 +903,7 @@ final class YSRaqSettings {
 			'ys_raq_email_bcc_emails',
 			'ys_raq_back_to_shop_label',
 			'ys_raq_update_list_label',
+			'ys_raq_mini_cart_button_label',
 		);
 
 		foreach ( $text_fields as $key ) {
