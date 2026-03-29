@@ -1,5 +1,7 @@
 # Dependencies
 vendor/
+!vendor/autoload.php
+!vendor/yangsheep/
 node_modules/
 
 # IDE
