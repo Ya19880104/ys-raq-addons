@@ -636,8 +636,24 @@ final class YSRaqSettings {
 			return;
 		}
 
+		// 處理單一刪除（GET 請求帶 action=delete）
+		if ( 'delete' === ( $_GET['action'] ?? '' ) && isset( $_GET['quote_id'], $_GET['_wpnonce'] ) ) {
+			$quote_id = absint( $_GET['quote_id'] );
+			$post     = get_post( $quote_id );
+
+			if ( $post
+				&& YSRaqQuoteHistory::POST_TYPE === $post->post_type
+				&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'ys_raq_delete_quote_' . $quote_id )
+			) {
+				wp_delete_post( $quote_id, true );
+				// 重新導向到列表頁，避免重複刪除
+				wp_safe_redirect( admin_url( 'admin.php?page=ys-raq-quotes&deleted=1' ) );
+				exit;
+			}
+		}
+
 		// 查看單一報價詳情
-		if ( isset( $_GET['quote_id'] ) ) {
+		if ( isset( $_GET['quote_id'] ) && ! isset( $_GET['action'] ) ) {
 			$this->render_quotes_page_wrap( true, absint( $_GET['quote_id'] ) );
 			return;
 		}
@@ -652,6 +668,23 @@ final class YSRaqSettings {
 		?>
 		<div class="wrap">
 			<h1 class="wp-heading-inline" style="display:none;"><?php esc_html_e( '報價單紀錄', 'ys-raq-addons' ); ?></h1>
+
+			<?php if ( isset( $_GET['deleted'] ) ) : ?>
+				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( '報價紀錄已刪除。', 'ys-raq-addons' ); ?></p></div>
+			<?php endif; ?>
+
+			<?php if ( isset( $_GET['bulk_action'], $_GET['processed'] ) ) : ?>
+				<div class="notice notice-success is-dismissible"><p>
+					<?php
+					$processed = absint( $_GET['processed'] );
+					if ( 'delete' === $_GET['bulk_action'] ) {
+						printf( esc_html__( '已刪除 %d 筆報價紀錄。', 'ys-raq-addons' ), $processed );
+					} else {
+						printf( esc_html__( '已更新 %d 筆報價紀錄的狀態。', 'ys-raq-addons' ), $processed );
+					}
+					?>
+				</p></div>
+			<?php endif; ?>
 		</div>
 
 		<div class="ys-settings-wrap">
@@ -693,7 +726,7 @@ final class YSRaqSettings {
 				</span>
 			</div>
 			<div class="ys-quotes-list-body">
-				<form method="get">
+				<form method="post">
 					<input type="hidden" name="page" value="ys-raq-quotes" />
 					<?php $table->display(); ?>
 				</form>

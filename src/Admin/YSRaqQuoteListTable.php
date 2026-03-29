@@ -214,20 +214,9 @@ class YSRaqQuoteListTable extends \WP_List_Table {
 			return;
 		}
 
-		// 單一刪除
-		if ( 'delete' === $action && isset( $_GET['quote_id'] ) && isset( $_GET['_wpnonce'] ) ) {
-			$quote_id = absint( $_GET['quote_id'] );
-			$post     = get_post( $quote_id );
-			if ( $post
-				&& YSRaqQuoteHistory::POST_TYPE === $post->post_type
-				&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'ys_raq_delete_quote_' . $quote_id )
-			) {
-				wp_delete_post( $quote_id, true );
-			}
-			return;
-		}
+		// 單一刪除已在 YSRaqSettings::render_quotes_page() 中處理（GET 請求帶 redirect）
 
-		// 批次操作
+		// 批次操作（POST 表單）
 		if ( ! isset( $_POST['quote_ids'] ) || ! is_array( $_POST['quote_ids'] ) ) {
 			return;
 		}
@@ -235,6 +224,7 @@ class YSRaqQuoteListTable extends \WP_List_Table {
 		check_admin_referer( 'bulk-quotes' );
 
 		$ids = array_map( 'absint', $_POST['quote_ids'] );
+		$processed = 0;
 
 		foreach ( $ids as $id ) {
 			// 確認目標是報價紀錄
@@ -245,10 +235,18 @@ class YSRaqQuoteListTable extends \WP_List_Table {
 
 			if ( 'delete' === $action ) {
 				wp_delete_post( $id, true );
+				$processed++;
 			} elseif ( str_starts_with( $action, 'mark_' ) ) {
 				$status = str_replace( 'mark_', '', $action );
 				update_post_meta( $id, '_ys_raq_status', sanitize_key( $status ) );
+				$processed++;
 			}
+		}
+
+		// 重新導向避免重複提交
+		if ( $processed > 0 ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=ys-raq-quotes&bulk_action=' . $action . '&processed=' . $processed ) );
+			exit;
 		}
 	}
 
