@@ -485,6 +485,17 @@ final class YSRaqSettings {
 						<p class="description"><?php esc_html_e( '迷你詢價車視窗底部的按鈕文字。', 'ys-raq-addons' ); ?></p>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row">
+						<label for="ys_raq_mini_cart_empty_text"><?php esc_html_e( '空清單提示文字', 'ys-raq-addons' ); ?></label>
+					</th>
+					<td>
+						<input type="text" id="ys_raq_mini_cart_empty_text" name="ys_raq_mini_cart_empty_text"
+							value="<?php echo esc_attr( get_option( 'ys_raq_mini_cart_empty_text', __( '詢價清單是空的', 'ys-raq-addons' ) ) ); ?>"
+							class="regular-text" />
+						<p class="description"><?php esc_html_e( '迷你詢價車清單為空時顯示的文字。', 'ys-raq-addons' ); ?></p>
+					</td>
+				</tr>
 			</table>
 		</div>
 		<?php
@@ -937,6 +948,7 @@ final class YSRaqSettings {
 			'ys_raq_back_to_shop_label',
 			'ys_raq_update_list_label',
 			'ys_raq_mini_cart_button_label',
+			'ys_raq_mini_cart_empty_text',
 		);
 
 		foreach ( $text_fields as $key ) {

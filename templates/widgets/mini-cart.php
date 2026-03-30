@@ -61,7 +61,7 @@ $tax_display     = get_option( 'woocommerce_tax_display_cart' );
 		<ul class="ys-raq-list">
 			<?php if ( 0 === $num_items ) : ?>
 				<li class="ys-raq-no-product">
-					<?php echo esc_html( apply_filters( 'ys_raq_mini_cart_empty_message', __( '詢價清單是空的', 'ys-raq-addons' ) ) ); ?>
+					<?php echo esc_html( apply_filters( 'ys_raq_mini_cart_empty_message', get_option( 'ys_raq_mini_cart_empty_text', __( '詢價清單是空的', 'ys-raq-addons' ) ) ) ); ?>
 				</li>
 			<?php else : ?>
 				<?php

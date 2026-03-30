@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:       YS RAQ Addons
  * Description:       為 YITH WooCommerce Request a Quote 免費版新增 Mini Cart、收件人管理、產品資訊顯示控制、自訂表單欄位、報價歷史等功能。
- * Version:           2.2.2
+ * Version:           2.2.3
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            YANGSHEEP DESIGN
@@ -27,7 +27,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // 外掛常數
-define( 'YS_RAQ_ADDONS_VERSION', '2.2.2' );
+define( 'YS_RAQ_ADDONS_VERSION', '2.2.3' );
 define( 'YS_RAQ_ADDONS_PLUGIN_FILE', __FILE__ );
 define( 'YS_RAQ_ADDONS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'YS_RAQ_ADDONS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

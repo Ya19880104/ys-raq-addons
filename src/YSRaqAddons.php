@@ -102,7 +102,7 @@ final class YSRaqAddons {
 			'nonce'   => wp_create_nonce( 'ys-raq-mini-cart' ),
 			'raq_url' => function_exists( 'YITH_Request_Quote' ) ? \YITH_Request_Quote()->get_raq_page_url() : '',
 			'i18n'    => array(
-				'empty_list' => esc_html__( '詢價清單是空的', 'ys-raq-addons' ),
+				'empty_list' => esc_html( get_option( 'ys_raq_mini_cart_empty_text', __( '詢價清單是空的', 'ys-raq-addons' ) ) ),
 			),
 		) );
 	}
