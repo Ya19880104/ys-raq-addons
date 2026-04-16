@@ -147,6 +147,12 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 ## Changelog
 
+### 2.3.9 — 2026-04-16
+
+- 新增：報價清單數量 AJAX 自動更新——改數量後 500ms debounce 自動送出 `update_raq`，抽換 `#yith-ywrq-table-list`，免手動按 Update List（原按鈕自動隱藏）
+- 新增：更新過程 loading 遮罩（spinner）與右下角 toast 提示（`已更新` / `更新失敗`）
+- 調整：`ys-raq-quote-page.js` 改由 `enqueue_assets()` 正式載入（之前檔案存在但未入列）
+
 ### 2.3.8 — 2026-04-16
 
 - 修正：Email 等原生必填欄位在 label 旁出現兩個 `*` 星號的問題（`hide_native_form_fields()` 改為先清除再重建，避免與 YITH RAQ 原生模板重複注入 `<abbr class="required">`）

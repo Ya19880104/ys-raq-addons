@@ -519,6 +519,27 @@ final class YSRaqQuotePage {
 			array(),
 			YS_RAQ_ADDONS_VERSION
 		);
+
+		wp_enqueue_script(
+			'ys-raq-quote-page',
+			YS_RAQ_ADDONS_PLUGIN_URL . 'assets/js/ys-raq-quote-page.js',
+			array( 'jquery' ),
+			YS_RAQ_ADDONS_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			'ys-raq-quote-page',
+			'ys_raq_quote_params',
+			array(
+				'debounceMs' => 500,
+				'i18n'       => array(
+					'updating' => __( '更新中...', 'ys-raq-addons' ),
+					'updated'  => __( '已更新', 'ys-raq-addons' ),
+					'failed'   => __( '更新失敗', 'ys-raq-addons' ),
+				),
+			)
+		);
 	}
 
 	// ────────────────────────────────────────────
