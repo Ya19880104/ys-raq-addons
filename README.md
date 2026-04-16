@@ -147,6 +147,10 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 ## Changelog
 
+### 2.3.8 — 2026-04-16
+
+- 修正：Email 等原生必填欄位在 label 旁出現兩個 `*` 星號的問題（`hide_native_form_fields()` 改為先清除再重建，避免與 YITH RAQ 原生模板重複注入 `<abbr class="required">`）
+
 ### 2.0.0 — 2026-03-13
 
 - 新增：報價歷史紀錄系統（CPT + WP_List_Table + 狀態管理 + 批次操作）

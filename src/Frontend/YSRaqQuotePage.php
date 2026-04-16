@@ -314,27 +314,39 @@ final class YSRaqQuotePage {
 				continue;
 			}
 
-			// 必填控制：為 input/textarea 添加或移除 required 屬性
+			// 必填控制：先清除原生必填標記再依設定重建，避免與 YITH 原生模板重複注入造成雙星號
 			$input_name = $field['input_name'];
+
+			// 清除 label 內既有的 <abbr class="required">*</abbr>
+			$html = preg_replace_callback(
+				'/(id="' . preg_quote( $row_id, '/' ) . '"[^>]*>.*?<label[^>]*>)(.*?)(<\/label>)/s',
+				static function ( array $matches ): string {
+					$clean = preg_replace( '/\s*<abbr\b[^>]*class="[^"]*\brequired\b[^"]*"[^>]*>.*?<\/abbr>/s', '', $matches[2] );
+					return $matches[1] . $clean . $matches[3];
+				},
+				$html
+			);
+
+			// 清除 input/textarea 上既有的 required 屬性
+			$html = preg_replace(
+				'/(id="' . preg_quote( $row_id, '/' ) . '".*?)(name="' . preg_quote( $input_name, '/' ) . '"[^>]*?)\s+required(?=[\s\/>])/s',
+				'$1$2',
+				$html
+			);
+
 			if ( 'yes' === $required ) {
-				// 在該欄位區塊內找到 input/textarea，若沒有 required 則添加
+				// 重新加上 required 屬性
 				$html = preg_replace(
 					'/(name="' . preg_quote( $input_name, '/' ) . '"[^>]*?)(\s*\/?>)/s',
 					'$1 required$2',
 					$html
 				);
-				// 在 label 後添加必填星號（如果沒有的話）
+				// 重新加上必填星號
 				$html = preg_replace(
 					'/(id="' . preg_quote( $row_id, '/' ) . '"[^>]*>.*?<label[^>]*>)(.*?)(<\/label>)/s',
 					'$1$2 <abbr class="required" title="required">*</abbr>$3',
 					$html
 				);
-			} else {
-				// 移除 required 屬性（如果原本有的話）
-				// 在該欄位的 input/textarea 上移除 required
-				// 先找到該 row 的區域，再處理
-				$pattern = '/(id="' . preg_quote( $row_id, '/' ) . '".*?)(name="' . preg_quote( $input_name, '/' ) . '"[^>]*?)\s+required/s';
-				$html    = preg_replace( $pattern, '$1$2', $html );
 			}
 		}
 
