@@ -147,6 +147,13 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 ## Changelog
 
+### 2.3.11 — 2026-04-23
+
+- 新增：Mini Cart 行動版改為置中浮層（左右各 10px 留白、四角圓角 12px、box-shadow 強化），取代原本的 bottom sheet
+- 變更：Mini Cart 內容區改為只顯示「數量：N」，移除金額（NT$0）顯示；RAQ 詢價情境不應有價格
+- 修正：Plugin Hub 客戶端自更新 spinner 永遠停住 — `updatePlugin()` / `installPlugin()` 加上 180 秒 AJAX 超時，成功後強制 reload 頁面確保新資源載入
+- 強化：Hub 客戶端伺服器端更新/安裝 handler `set_time_limit(300) + memory_limit 256M + ignore_user_abort + wp_clean_plugins_cache()`，避免中途被砍或讀到快取版本
+
 ### 2.3.10 — 2026-04-20
 
 - 修正：原生必填欄位在 label 仍可能出現兩個 `*` 星號的殘留案例（`hide_native_form_fields()` 改為 row-scoped + 全站 label 去重安全網，徹底阻斷重複注入）

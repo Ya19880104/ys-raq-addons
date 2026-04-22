@@ -136,6 +136,12 @@ final class YSHubAjaxHandler {
             ) );
         }
 
+        if ( function_exists( 'set_time_limit' ) ) {
+            @set_time_limit( 300 );
+        }
+        @ini_set( 'memory_limit', '256M' );
+        ignore_user_abort( true );
+
         $slug    = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
         $version = sanitize_text_field( wp_unslash( $_POST['version'] ?? '' ) );
 
@@ -151,6 +157,10 @@ final class YSHubAjaxHandler {
             wp_send_json_error( array(
                 'message' => $result->get_error_message(),
             ) );
+        }
+
+        if ( function_exists( 'wp_clean_plugins_cache' ) ) {
+            wp_clean_plugins_cache( true );
         }
 
         $plugin_data = self::get_updated_plugin_data( $slug, $version );
@@ -179,6 +189,14 @@ final class YSHubAjaxHandler {
             ) );
         }
 
+        // 更新流程可能耗時 5~30 秒以上（下載 + 解壓 + 移動 + 啟用）
+        // 儘量延長執行時間與記憶體，避免中途被砍掉造成前端 spinner 永遠停住
+        if ( function_exists( 'set_time_limit' ) ) {
+            @set_time_limit( 300 );
+        }
+        @ini_set( 'memory_limit', '256M' );
+        ignore_user_abort( true );
+
         $slug    = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
         $version = sanitize_text_field( wp_unslash( $_POST['version'] ?? '' ) );
 
@@ -196,7 +214,12 @@ final class YSHubAjaxHandler {
             ) );
         }
 
-        // 回傳更新後的外掛完整狀態（讓 JS 整張卡片重新渲染）
+        // 清除外掛資料快取，確保 get_plugins() 讀到新版本 header
+        if ( function_exists( 'wp_clean_plugins_cache' ) ) {
+            wp_clean_plugins_cache( true );
+        }
+
+        // 回傳更新後的外掛完整狀態（讓 JS 整張卡片重新渲染 / reload）
         $plugin_data = self::get_updated_plugin_data( $slug, $version );
 
         wp_send_json_success( array(

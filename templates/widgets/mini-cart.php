@@ -111,29 +111,15 @@ $tax_display     = get_option( 'woocommerce_tax_display_cart' );
 								</small>
 							<?php endif; ?>
 
-							<?php if ( $show_quantity || $show_price ) : ?>
+							<?php if ( $show_quantity ) : ?>
 								<span class="ys-raq-item-qty-price">
 									<?php
-									if ( $show_quantity ) {
-										echo esc_html( $quantity );
-									}
-
-									if ( $show_price ) {
-										$price = ( 'incl' === $tax_display )
-											? wc_get_price_including_tax( $_product, array( 'qty' => $quantity ) )
-											: wc_get_price_excluding_tax( $_product, array( 'qty' => $quantity ) );
-
-										if ( $price ) {
-											$price_html = isset( WC()->cart )
-												? WC()->cart->get_product_price( $_product )
-												: $_product->get_price_html();
-										} else {
-											$price_html = wc_price( 0 );
-										}
-
-										$separator = $show_quantity ? ' &times; ' : '';
-										echo wp_kses_post( $separator . $price_html );
-									}
+									/* RAQ（詢價）情境不顯示金額，只顯示數量；show_price 設定被移除以避免 NT$0 誤導 */
+									printf(
+										/* translators: %d: 詢價品項數量 */
+										esc_html__( '數量：%d', 'ys-raq-addons' ),
+										(int) $quantity
+									);
 									?>
 								</span>
 							<?php endif; ?>
