@@ -147,6 +147,11 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 ## Changelog
 
+### 2.3.12 — 2026-04-23
+
+- 修正：數量 AJAX 更新成功後，+/- 按鈕第二次按沒反應 —— `replaceWith` 整個 `<table>` 會摧毀主題（Blocksy `.ct-increase/.ct-decrease`、Flatsome `.plus/.minus` 等）綁在 DOM node 上的 click handler。改為 **in-place 更新**：只移除已刪除的 row + 更新 subtotal，qty input 與 +/- 按鈕節點完整保留，事件綁定不受影響。
+- 變更：qty change listener 改用 `document` 級事件代理，即使 row 被刪除重建仍可持續運作。
+
 ### 2.3.11 — 2026-04-23
 
 - 新增：Mini Cart 行動版改為置中浮層（左右各 10px 留白、四角圓角 12px、box-shadow 強化），取代原本的 bottom sheet
