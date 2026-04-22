@@ -97,11 +97,21 @@ final class YSRaqAddons {
 			true
 		);
 
+		// 刷新延遲（可由後台調整）— MutationObserver / YITH 事件觸發後，先等多久做第一輪刷新
+		$refresh_delay = absint( get_option( 'ys_raq_mini_cart_refresh_delay', 600 ) );
+		$refresh_delay = max( 200, min( 3000, $refresh_delay ) );
+
+		// 安全刷新延遲 — 第一輪之後再做一次保險刷新，確保 YITH DOM 完全更新後 badge 正確
+		$settle_delay = absint( get_option( 'ys_raq_mini_cart_settle_delay', 1500 ) );
+		$settle_delay = max( 500, min( 5000, $settle_delay ) );
+
 		wp_localize_script( 'ys-raq-mini-cart', 'ys_raq_params', array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'ys-raq-mini-cart' ),
-			'raq_url' => function_exists( 'YITH_Request_Quote' ) ? \YITH_Request_Quote()->get_raq_page_url() : '',
-			'i18n'    => array(
+			'ajaxurl'      => admin_url( 'admin-ajax.php' ),
+			'nonce'        => wp_create_nonce( 'ys-raq-mini-cart' ),
+			'raq_url'      => function_exists( 'YITH_Request_Quote' ) ? \YITH_Request_Quote()->get_raq_page_url() : '',
+			'refreshDelay' => $refresh_delay,
+			'settleDelay'  => $settle_delay,
+			'i18n'         => array(
 				'empty_list' => esc_html( get_option( 'ys_raq_mini_cart_empty_text', __( '詢價清單是空的', 'ys-raq-addons' ) ) ),
 			),
 		) );

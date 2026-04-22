@@ -88,6 +88,7 @@
 | `show_price` | 1 | 顯示價格（1/0） |
 | `show_quantity` | 1 | 顯示數量（1/0） |
 | `show_variations` | 1 | 顯示變體資訊（1/0） |
+| `qty_label` | （空，讀後台設定） | 單筆品項的數量前綴字串（e.g. `Qty: `） |
 
 **完整範例：**
 
@@ -146,6 +147,15 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 本外掛完全支援 WooCommerce High-Performance Order Storage（HPOS）。
 
 ## Changelog
+
+### 2.3.13 — 2026-04-23
+
+- 新增：**迷你詢價車數量標籤可後台自訂**（顯示設定 → 迷你詢價車 → 「數量標籤文字」），英文站可改為 `Qty: `、日文站可改 `数量：` 等；Shortcode 亦可用 `qty_label` 屬性即時覆寫。
+- 新增：**雙點刷新（double-tap refresh）AJAX 策略**取代單一固定 setTimeout：偵測到 YITH 加入／移除訊號後，於第一輪刷新延遲（預設 600ms）快速反應，再於第二輪 settle delay（預設 1500ms）補刷一次，避免 YITH session 尚未完全寫入時 badge 漏更新。
+- 新增：後台「迷你詢價車 AJAX 刷新」區塊，可調整第一輪延遲（200–3000ms）與第二輪延遲（500–5000ms），主機較慢時可把第二輪設到 2000–2500ms。
+- 修正：相容性事件名稱 typo —— 舊版 `yith_wwraq_*`（兩個 w）改為正確的 `yith_ywraq_*`；同時新增 `ywraq_table_reloaded` 事件監聽，擴大觸發來源。
+- 強化：mini-cart.js 加入 `inflightRefresh` 管理，連續觸發時主動 abort 舊請求避免 race；`ajaxComplete` 更精準匹配 YITH 的 `ywraq_action=add_item/remove_item` 與自身的 `ys_raq_remove_item`。
+- 強化：`ys_raq_refresh_mini_cart` AJAX handler 補齊 `qty_label` 參數傳遞，確保模板重新渲染時仍尊重 shortcode 級別的 label 覆寫。
 
 ### 2.3.12 — 2026-04-23
 

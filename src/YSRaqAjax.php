@@ -56,6 +56,8 @@ class YSRaqAjax {
 			'show_price'        => (bool) ( $posted['show_price'] ?? $defaults['show_price'] ),
 			'show_quantity'     => (bool) ( $posted['show_quantity'] ?? $defaults['show_quantity'] ),
 			'show_variations'   => (bool) ( $posted['show_variations'] ?? $defaults['show_variations'] ),
+			// qty_label 空字串代表 fallback 到 ys_raq_mini_cart_qty_label option（模板內處理）
+			'qty_label'         => sanitize_text_field( $posted['qty_label'] ?? ( $defaults['qty_label'] ?? '' ) ),
 		);
 
 		ob_start();

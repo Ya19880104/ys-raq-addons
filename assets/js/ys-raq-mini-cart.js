@@ -4,13 +4,15 @@
  * 處理迷你詢價車的 AJAX 刷新、移除和行動裝置互動。
  *
  * 同步策略（類似 WooCommerce cart-fragments）：
- * 1. 事件驅動：MutationObserver + YITH 自訂事件 → 即時刷新
- * 2. 跨頁同步：sessionStorage 儲存 count，頁面載入時比對
- * 3. 跨分頁同步：監聽 storage 事件，其他分頁更新時自動同步
- * 4. Fallback：延遲輕量計數檢查（nonce 過期時也能用）
+ * 1. 事件驅動：MutationObserver + YITH 自訂事件 + ajaxComplete → 多訊號觸發
+ * 2. 雙點刷新：偵測到訊號後，於 refreshDelay（預設 600ms）先刷一次，再於 settleDelay（預設 1500ms）補刷
+ *              第一輪給使用者快速回饋、第二輪確保 YITH DOM / session 已完全落地
+ * 3. 跨頁同步：sessionStorage 儲存 count，頁面載入時比對
+ * 4. 跨分頁同步：監聽 storage 事件，其他分頁更新時自動同步
+ * 5. Fallback：延遲輕量計數檢查（nonce 過期時也能用）
  *
  * @package YangSheep\RaqAddons
- * @version 1.2.0
+ * @version 1.3.0
  */
 (function ($) {
 	'use strict';
@@ -23,9 +25,29 @@
 	var STORAGE_TIME_KEY = 'ys_raq_count_time';
 	var CACHE_LIFETIME = 5 * 60 * 1000; // 5 分鐘快取有效期
 
+	// 從後台設定讀取延遲（含安全 fallback）
+	var REFRESH_DELAY = (function () {
+		var v = parseInt(ys_raq_params.refreshDelay, 10);
+		if (isNaN(v) || v < 200) return 600;
+		if (v > 3000) return 3000;
+		return v;
+	})();
+
+	var SETTLE_DELAY = (function () {
+		var v = parseInt(ys_raq_params.settleDelay, 10);
+		if (isNaN(v) || v < 500) return 1500;
+		if (v > 5000) return 5000;
+		// 確保 settle > refresh
+		if (v <= REFRESH_DELAY) return REFRESH_DELAY + 500;
+		return v;
+	})();
+
 	var isMobile = window.matchMedia('(max-width: 768px)').matches;
 	var refreshTimer = null;
+	var settleTimer = null;
+	var inflightRefresh = null;
 	var lastKnownCount = -1;
+
 	var supportsStorage = (function () {
 		try {
 			sessionStorage.setItem('_ys_test', '1');
@@ -39,16 +61,33 @@
 	// ─── 工具函式 ──────────────────────────────
 
 	/**
-	 * 防抖刷新
+	 * 雙點刷新：排程 refreshDelay + settleDelay 兩輪刷新
+	 *
+	 * 使用情境：偵測到 YITH 加入／移除訊號後呼叫此函式。
+	 * - 第一輪（refreshDelay）：給使用者快速視覺回饋
+	 * - 第二輪（settleDelay）：補刷，確保 session/DOM 已完全落地
+	 *
+	 * 若在 refreshDelay 內重複觸發，只會保留最後一次（真正的 debounce），
+	 * 避免使用者連續點擊多項產品時打爆伺服器。
 	 */
-	function debouncedRefresh() {
+	function scheduleRefresh() {
 		if (refreshTimer) {
 			clearTimeout(refreshTimer);
 		}
+		if (settleTimer) {
+			clearTimeout(settleTimer);
+		}
+
 		refreshTimer = setTimeout(function () {
 			refreshTimer = null;
 			ysRaqRefreshWidgets();
-		}, 500);
+		}, REFRESH_DELAY);
+
+		settleTimer = setTimeout(function () {
+			settleTimer = null;
+			// 保險刷新 — 即使第一輪失敗或資料尚未同步也能補救
+			ysRaqRefreshWidgets();
+		}, SETTLE_DELAY);
 	}
 
 	/**
@@ -132,7 +171,7 @@
 			url: ys_raq_params.ajaxurl,
 			data: { action: 'ys_raq_get_count' },
 			success: function (response) {
-				if (response.success) {
+				if (response && response.success) {
 					updateBadges(response.data.count);
 				}
 			}
@@ -141,6 +180,8 @@
 
 	/**
 	 * 刷新所有 Mini Cart Widget
+	 *
+	 * 若上一次刷新請求尚未完成，先取消避免競爭條件（race）。
 	 */
 	function ysRaqRefreshWidgets() {
 		var $widgets = $(document).find('.ys-raq-mini-cart-wrapper');
@@ -148,6 +189,12 @@
 		if ($widgets.length === 0) {
 			ysRaqRefreshCount();
 			return;
+		}
+
+		// 取消仍在飛行中的舊請求（若有）
+		if (inflightRefresh && typeof inflightRefresh.abort === 'function') {
+			try { inflightRefresh.abort(); } catch (e) {}
+			inflightRefresh = null;
 		}
 
 		$widgets.each(function () {
@@ -166,20 +213,25 @@
 				} catch (e) {}
 			}
 
-			$.ajax({
+			inflightRefresh = $.ajax({
 				type: 'POST',
 				url: ys_raq_params.ajaxurl,
 				data: data,
 				success: function (response) {
-					if (response.success) {
+					if (response && response.success) {
 						$wrapper.html(response.data.html);
 						updateBadges(response.data.count);
 						$(document).trigger('ys_raq_mini_cart_refreshed', [response.data]);
 					}
 				},
-				error: function () {
-					// nonce 過期，fallback 到輕量計數
+				error: function (jqXHR, status) {
+					// abort 是正常取消，不做 fallback
+					if (status === 'abort') return;
+					// nonce 過期或其他錯誤，fallback 到輕量計數
 					ysRaqRefreshCount();
+				},
+				complete: function () {
+					inflightRefresh = null;
 				}
 			});
 		});
@@ -190,9 +242,9 @@
 	/**
 	 * 頁面載入同步策略（類似 WC cart-fragments）：
 	 *
-	 * 1. 先用 sessionStorage 快取立即更新 badge（零延遲）
+	 * 1. 先用 sessionStorage 快取立即更新 badge（零延遲、避免閃爍 0）
 	 * 2. 然後做一次 AJAX 取得真實數量
-	 * 3. 3 秒後再做一次 fallback 檢查
+	 * 3. settleDelay 後再做一次保險檢查（防止 nonce 過期）
 	 */
 	(function initSync() {
 		// Step 1: 立即用 sessionStorage 的快取值更新（避免閃爍 0）
@@ -205,9 +257,10 @@
 		ysRaqRefreshWidgets();
 
 		// Step 3: 延遲 fallback（防止 nonce 過期導致 Step 2 失敗）
+		// 以 settleDelay 的兩倍為保守值（至少 3000ms）
 		setTimeout(function () {
 			ysRaqRefreshCount();
-		}, 3000);
+		}, Math.max(3000, SETTLE_DELAY * 2));
 	})();
 
 	// ─── 跨分頁同步 ────────────────────────────
@@ -233,6 +286,10 @@
 
 	/**
 	 * MutationObserver：偵測 YITH RAQ 免費版的 DOM 變化
+	 *
+	 * YITH 免費版沒有可靠的 JS 事件，唯一可偵測的訊號是它插入的
+	 * `.yith_ywraq_add_item_response_message` DOM 節點（加入成功後）
+	 * 以及 `.cart_item` 被移除（從清單頁移除後）。
 	 */
 	var observer = new MutationObserver(function (mutations) {
 		for (var i = 0; i < mutations.length; i++) {
@@ -244,7 +301,7 @@
 					if (node.nodeType !== 1) continue;
 
 					if (node.classList && node.classList.contains('yith_ywraq_add_item_response_message')) {
-						debouncedRefresh();
+						scheduleRefresh();
 						return;
 					}
 				}
@@ -256,7 +313,7 @@
 					if (removed.nodeType !== 1) continue;
 
 					if (removed.classList && removed.classList.contains('cart_item')) {
-						debouncedRefresh();
+						scheduleRefresh();
 						return;
 					}
 				}
@@ -270,16 +327,28 @@
 	});
 
 	/**
-	 * 相容 YITH 付費版自訂事件
+	 * 相容 YITH 付費版與自訂事件
+	 *
+	 * 注意：YITH 免費版並不會觸發這些事件，但若使用者改用付費版
+	 * 或其他主題／外掛刻意觸發，這裡可以即時收到訊號。
+	 *
+	 * 事件名稱修正：舊版誤植為 yith_wwraq_*（兩個 w），正確為 yith_ywraq_*。
+	 * 同時保留舊 typo 以避免意外破壞既有整合。
 	 */
-	$(document).on('yith_wwraq_added_successfully yith_wwraq_removed_successfully', function () {
-		debouncedRefresh();
-	});
+	$(document).on(
+		'yith_ywraq_added_successfully yith_ywraq_removed_successfully ' +
+		'yith_wwraq_added_successfully yith_wwraq_removed_successfully ' +
+		'ywraq_table_reloaded',
+		function () {
+			scheduleRefresh();
+		}
+	);
 
 	/**
 	 * 監聽 YITH 免費版 AJAX 完成
 	 *
-	 * YITH 免費版的 add-to-quote 是透過 AJAX，完成後我們取得最新計數。
+	 * YITH 免費版 add-to-quote 透過 AJAX 完成後，改用雙點刷新策略，
+	 * 而非單一固定 setTimeout。
 	 */
 	$(document).ajaxComplete(function (event, xhr, settings) {
 		if (!settings || !settings.data) {
@@ -288,12 +357,13 @@
 
 		var data = typeof settings.data === 'string' ? settings.data : '';
 
-		if (data.indexOf('yith_ywraq_action') !== -1 ||
-			data.indexOf('add_item') !== -1 ||
-			data.indexOf('remove_item') !== -1) {
-			setTimeout(function () {
-				ysRaqRefreshCount();
-			}, 800);
+		if (
+			data.indexOf('yith_ywraq_action') !== -1 ||
+			data.indexOf('ywraq_action=add_item') !== -1 ||
+			data.indexOf('ywraq_action=remove_item') !== -1 ||
+			data.indexOf('action=ys_raq_remove_item') !== -1
+		) {
+			scheduleRefresh();
 		}
 	});
 
@@ -345,8 +415,10 @@
 				product_id: productId
 			},
 			success: function (response) {
-				if (response.success) {
+				if (response && response.success) {
+					// 立即刷新一次 + 排程保險刷新
 					ysRaqRefreshWidgets();
+					scheduleRefresh();
 
 					var $quote = $(document).find('.yith-ywraq-add-to-quote.add-to-quote-' + productId);
 					$quote.find('.yith_ywraq_add_item_response_message').remove();

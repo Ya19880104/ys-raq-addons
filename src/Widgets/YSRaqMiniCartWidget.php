@@ -43,6 +43,8 @@ class YSRaqMiniCartWidget extends \WP_Widget {
 		$show_price        = (bool) $instance['show_price'];
 		$show_quantity     = (bool) $instance['show_quantity'];
 		$show_variations   = (bool) $instance['show_variations'];
+		// qty_label 為選填：空字串代表「改讀後台 option」；有值則由 shortcode/widget 覆寫
+		$qty_label         = isset( $instance['qty_label'] ) ? (string) $instance['qty_label'] : '';
 
 		if ( ! apply_filters( 'ys_raq_before_print_mini_cart', true ) ) {
 			return;
@@ -61,6 +63,7 @@ class YSRaqMiniCartWidget extends \WP_Widget {
 			'show_price'        => $show_price,
 			'show_quantity'     => $show_quantity,
 			'show_variations'   => $show_variations,
+			'qty_label'         => $qty_label,
 		);
 
 		// 將 instance 資料編碼到 data attribute，供 AJAX 刷新使用（JSON 不會有 &/=/+ 問題）
@@ -174,6 +177,7 @@ class YSRaqMiniCartWidget extends \WP_Widget {
 			'show_price'        => 1,
 			'show_quantity'     => 1,
 			'show_variations'   => 1,
+			'qty_label'         => '', // 空字串 = 改讀後台 option（ys_raq_mini_cart_qty_label）
 		);
 	}
 }

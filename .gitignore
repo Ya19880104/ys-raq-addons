@@ -24,3 +24,4 @@ desktop.ini
 # Build
 *.zip
 .claude/
+pack.py

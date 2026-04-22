@@ -496,6 +496,51 @@ final class YSRaqSettings {
 						<p class="description"><?php esc_html_e( '迷你詢價車清單為空時顯示的文字。', 'ys-raq-addons' ); ?></p>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row">
+						<label for="ys_raq_mini_cart_qty_label"><?php esc_html_e( '數量標籤文字', 'ys-raq-addons' ); ?></label>
+					</th>
+					<td>
+						<input type="text" id="ys_raq_mini_cart_qty_label" name="ys_raq_mini_cart_qty_label"
+							value="<?php echo esc_attr( get_option( 'ys_raq_mini_cart_qty_label', __( '數量：', 'ys-raq-addons' ) ) ); ?>"
+							class="regular-text"
+							placeholder="<?php esc_attr_e( '例：數量： / Qty: / 件數：', 'ys-raq-addons' ); ?>" />
+						<p class="description"><?php esc_html_e( '迷你詢價車商品列每筆顯示的數量前綴。英文站可改為「Qty: 」、日文站可改「数量：」等。直接連著數字顯示（不加空格）。', 'ys-raq-addons' ); ?></p>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="ys-section-card">
+			<h3 class="ys-section-title">
+				<span class="dashicons dashicons-update"></span> <?php esc_html_e( '迷你詢價車 AJAX 刷新', 'ys-raq-addons' ); ?>
+			</h3>
+			<p class="description" style="margin:0 0 15px;padding:0 10px;">
+				<?php esc_html_e( '控制加入／移除詢價項目後，迷你詢價車的刷新時機。採用「雙點刷新」策略：第一輪快速反應，第二輪於 YITH DOM 完全更新後補刷一次，確保 badge 數字正確。', 'ys-raq-addons' ); ?>
+			</p>
+			<table class="form-table">
+				<tr>
+					<th scope="row">
+						<label for="ys_raq_mini_cart_refresh_delay"><?php esc_html_e( '第一輪刷新延遲', 'ys-raq-addons' ); ?></label>
+					</th>
+					<td>
+						<input type="number" id="ys_raq_mini_cart_refresh_delay" name="ys_raq_mini_cart_refresh_delay"
+							value="<?php echo esc_attr( get_option( 'ys_raq_mini_cart_refresh_delay', '600' ) ); ?>"
+							class="small-text" min="200" max="3000" step="50" /> ms
+						<p class="description"><?php esc_html_e( '偵測到 YITH 加入／移除事件後，等待多久執行第一次刷新（預設 600ms，範圍 200–3000ms）。連線較慢或主機較慢可適度加長。', 'ys-raq-addons' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label for="ys_raq_mini_cart_settle_delay"><?php esc_html_e( '第二輪保險刷新延遲', 'ys-raq-addons' ); ?></label>
+					</th>
+					<td>
+						<input type="number" id="ys_raq_mini_cart_settle_delay" name="ys_raq_mini_cart_settle_delay"
+							value="<?php echo esc_attr( get_option( 'ys_raq_mini_cart_settle_delay', '1500' ) ); ?>"
+							class="small-text" min="500" max="5000" step="100" /> ms
+						<p class="description"><?php esc_html_e( '第一輪後再等多久做保險刷新，確保 session 與 DOM 已完全更新（預設 1500ms，範圍 500–5000ms）。若仍偶發漏更新，請把此值調到 2000–2500ms。', 'ys-raq-addons' ); ?></p>
+					</td>
+				</tr>
 			</table>
 		</div>
 		<?php
@@ -949,6 +994,7 @@ final class YSRaqSettings {
 			'ys_raq_update_list_label',
 			'ys_raq_mini_cart_button_label',
 			'ys_raq_mini_cart_empty_text',
+			'ys_raq_mini_cart_qty_label',
 		);
 
 		foreach ( $text_fields as $key ) {
@@ -962,11 +1008,25 @@ final class YSRaqSettings {
 			update_option( 'ys_raq_back_to_shop_url', esc_url_raw( wp_unslash( $_POST['ys_raq_back_to_shop_url'] ) ) );
 		}
 
-		// 數值欄位
+		// 數值欄位（縮圖寬度）
 		if ( isset( $_POST['ys_raq_thumbnail_width'] ) ) {
 			$width = absint( $_POST['ys_raq_thumbnail_width'] );
 			$width = max( 30, min( 300, $width ) );
 			update_option( 'ys_raq_thumbnail_width', (string) $width );
+		}
+
+		// 迷你詢價車 AJAX 刷新延遲（第一輪）
+		if ( isset( $_POST['ys_raq_mini_cart_refresh_delay'] ) ) {
+			$delay = absint( $_POST['ys_raq_mini_cart_refresh_delay'] );
+			$delay = max( 200, min( 3000, $delay ) );
+			update_option( 'ys_raq_mini_cart_refresh_delay', (string) $delay );
+		}
+
+		// 迷你詢價車 AJAX 保險刷新延遲（第二輪）
+		if ( isset( $_POST['ys_raq_mini_cart_settle_delay'] ) ) {
+			$settle = absint( $_POST['ys_raq_mini_cart_settle_delay'] );
+			$settle = max( 500, min( 5000, $settle ) );
+			update_option( 'ys_raq_mini_cart_settle_delay', (string) $settle );
 		}
 	}
 

@@ -5,7 +5,7 @@
  * 可在佈景主題中複製到 yourtheme/ys-raq-addons/widgets/mini-cart.php 來覆寫。
  *
  * @package YangSheep\RaqAddons
- * @version 1.0.0
+ * @version 1.1.0
  *
  * @var array  $raq_content       詢價清單內容
  * @var string $title             Widget 標題
@@ -17,6 +17,7 @@
  * @var bool   $show_price        顯示價格
  * @var bool   $show_quantity     顯示數量
  * @var bool   $show_variations   顯示變體資訊
+ * @var string $qty_label         [選填] 數量 label 覆寫（shortcode 傳入；未傳入時改讀後台 option）
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -28,6 +29,13 @@ $show_price      = (bool) $show_price;
 $show_quantity   = (bool) $show_quantity;
 $show_variations = (bool) $show_variations;
 $tax_display     = get_option( 'woocommerce_tax_display_cart' );
+
+// 數量 label：shortcode 顯式傳入優先，否則讀後台 option（預設「數量：」）。
+// 英文站可將後台設為「Qty: 」或空字串 + 只顯示數字等配置。
+$qty_label_override = isset( $qty_label ) ? (string) $qty_label : '';
+$qty_label_text     = '' !== $qty_label_override
+	? $qty_label_override
+	: (string) get_option( 'ys_raq_mini_cart_qty_label', __( '數量：', 'ys-raq-addons' ) );
 ?>
 
 <?php do_action( 'ys_raq_before_mini_cart' ); ?>
@@ -114,12 +122,9 @@ $tax_display     = get_option( 'woocommerce_tax_display_cart' );
 							<?php if ( $show_quantity ) : ?>
 								<span class="ys-raq-item-qty-price">
 									<?php
-									/* RAQ（詢價）情境不顯示金額，只顯示數量；show_price 設定被移除以避免 NT$0 誤導 */
-									printf(
-										/* translators: %d: 詢價品項數量 */
-										esc_html__( '數量：%d', 'ys-raq-addons' ),
-										(int) $quantity
-									);
+									/* RAQ（詢價）情境不顯示金額，只顯示數量；show_price 設定被移除以避免 NT$0 誤導。
+									   label 可由後台「迷你詢價車 → 數量 label」設定，或 shortcode qty_label 屬性覆寫，方便英文站調整。 */
+									echo esc_html( $qty_label_text ) . esc_html( (int) $quantity );
 									?>
 								</span>
 							<?php endif; ?>
