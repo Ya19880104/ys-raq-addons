@@ -303,9 +303,8 @@ final class YSRaqQuotePage {
 		);
 
 		foreach ( $native_fields as $field ) {
-			$show     = get_option( $field['show_key'], 'yes' );
-			$required = get_option( $field['required_key'], $field['default_req'] );
-			$row_id   = $field['row_id'];
+			$show   = get_option( $field['show_key'], 'yes' );
+			$row_id = $field['row_id'];
 
 			// 隱藏停用的欄位
 			if ( 'yes' !== $show ) {
@@ -314,43 +313,114 @@ final class YSRaqQuotePage {
 				continue;
 			}
 
-			// 必填控制：先清除原生必填標記再依設定重建，避免與 YITH 原生模板重複注入造成雙星號
-			$input_name = $field['input_name'];
-
-			// 清除 label 內既有的 <abbr class="required">*</abbr>
-			$html = preg_replace_callback(
-				'/(id="' . preg_quote( $row_id, '/' ) . '"[^>]*>.*?<label[^>]*>)(.*?)(<\/label>)/s',
-				static function ( array $matches ): string {
-					$clean = preg_replace( '/\s*<abbr\b[^>]*class="[^"]*\brequired\b[^"]*"[^>]*>.*?<\/abbr>/s', '', $matches[2] );
-					return $matches[1] . $clean . $matches[3];
-				},
-				$html
-			);
-
-			// 清除 input/textarea 上既有的 required 屬性
-			$html = preg_replace(
-				'/(id="' . preg_quote( $row_id, '/' ) . '".*?)(name="' . preg_quote( $input_name, '/' ) . '"[^>]*?)\s+required(?=[\s\/>])/s',
-				'$1$2',
-				$html
-			);
-
-			if ( 'yes' === $required ) {
-				// 重新加上 required 屬性
-				$html = preg_replace(
-					'/(name="' . preg_quote( $input_name, '/' ) . '"[^>]*?)(\s*\/?>)/s',
-					'$1 required$2',
-					$html
-				);
-				// 重新加上必填星號
-				$html = preg_replace(
-					'/(id="' . preg_quote( $row_id, '/' ) . '"[^>]*>.*?<label[^>]*>)(.*?)(<\/label>)/s',
-					'$1$2 <abbr class="required" title="required">*</abbr>$3',
-					$html
-				);
-			}
+			// 必填控制：scope 到整個 <p id="xxx_row">...</p> 段落內處理，避免跨 row 誤傷
+			$html = $this->rebuild_row_required_marker( $html, $field );
 		}
 
+		// 最後安全網：若 label 內仍殘留多個必填星號，只保留第一個
+		$html = $this->dedupe_required_abbrs( $html );
+
 		return $html;
+	}
+
+	/**
+	 * 重建單一原生欄位的必填標記（星號 + required 屬性）
+	 *
+	 * 將目標 row 的整個 <p>...</p> 段落抓出後，於該段內：
+	 *   1. 清除 label 內所有 <abbr class="required">*</abbr>
+	 *   2. 清除 input/textarea 上的 required 屬性
+	 *   3. 若設定為必填，於 label 末尾加一個 abbr 並於 input 上加回 required
+	 */
+	private function rebuild_row_required_marker( string $html, array $field ): string {
+		$row_id     = $field['row_id'];
+		$input_name = $field['input_name'];
+		$required   = 'yes' === get_option( $field['required_key'], $field['default_req'] );
+
+		$row_pattern = '/<p\b[^>]*\bid="' . preg_quote( $row_id, '/' ) . '"[^>]*>.*?<\/p>/s';
+		$abbr_pattern = '/\s*<abbr\b[^>]*\bclass="[^"]*\brequired\b[^"]*"[^>]*>.*?<\/abbr>/s';
+
+		$result = preg_replace_callback(
+			$row_pattern,
+			static function ( array $m ) use ( $input_name, $required, $abbr_pattern ): string {
+				$row = $m[0];
+
+				// 1. 清除 label 內所有 <abbr class="required">
+				$row = preg_replace_callback(
+					'/(<label\b[^>]*>)(.*?)(<\/label>)/s',
+					static function ( array $lm ) use ( $abbr_pattern ): string {
+						$cleaned = preg_replace( $abbr_pattern, '', $lm[2] );
+						return $lm[1] . rtrim( (string) $cleaned ) . $lm[3];
+					},
+					$row
+				);
+
+				// 2. 清除 input/textarea 上既有的 required 屬性
+				$row = preg_replace(
+					'/(\bname="' . preg_quote( $input_name, '/' ) . '"[^>]*?)\s+required(?=[\s\/>])/s',
+					'$1',
+					$row
+				);
+
+				if ( $required ) {
+					// 3a. 在 input/textarea tag 末端加回 required
+					$row = preg_replace(
+						'/(\bname="' . preg_quote( $input_name, '/' ) . '"[^>]*?)(\s*\/?>)/s',
+						'$1 required$2',
+						$row,
+						1
+					);
+					// 3b. 在 label 末尾加回一個必填星號
+					$row = preg_replace(
+						'/(<label\b[^>]*>)(.*?)(<\/label>)/s',
+						'$1$2 <abbr class="required" title="required">*</abbr>$3',
+						$row,
+						1
+					);
+				}
+
+				return $row;
+			},
+			$html,
+			1
+		);
+
+		return null === $result ? $html : $result;
+	}
+
+	/**
+	 * 安全網：同一個 label 內若出現多個 <abbr class="required">，只保留第一個
+	 *
+	 * 用於防止任何未預期的重複注入（包含其他外掛、主題覆寫或 regex 邊界案例）。
+	 */
+	private function dedupe_required_abbrs( string $html ): string {
+		$abbr_pattern = '/<abbr\b[^>]*\bclass="[^"]*\brequired\b[^"]*"[^>]*>.*?<\/abbr>/s';
+
+		$result = preg_replace_callback(
+			'/(<label\b[^>]*>)(.*?)(<\/label>)/s',
+			static function ( array $m ) use ( $abbr_pattern ): string {
+				if ( preg_match_all( $abbr_pattern, $m[2], $all ) <= 1 ) {
+					return $m[0];
+				}
+
+				$seen  = false;
+				$clean = preg_replace_callback(
+					$abbr_pattern,
+					static function ( array $_m ) use ( &$seen ): string {
+						if ( $seen ) {
+							return '';
+						}
+						$seen = true;
+						return $_m[0];
+					},
+					$m[2]
+				);
+
+				return $m[1] . (string) $clean . $m[3];
+			},
+			$html
+		);
+
+		return null === $result ? $html : $result;
 	}
 
 	// ────────────────────────────────────────────

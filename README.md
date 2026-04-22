@@ -147,6 +147,11 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 ## Changelog
 
+### 2.3.10 — 2026-04-20
+
+- 修正：原生必填欄位在 label 仍可能出現兩個 `*` 星號的殘留案例（`hide_native_form_fields()` 改為 row-scoped + 全站 label 去重安全網，徹底阻斷重複注入）
+- 修正：報價清單數量 AJAX 自動更新完全不觸發（JS 選擇器誤植 `#yith-ywrq-form`，應為 `#yith-ywraq-form`；YITH 表單 id 帶 `a`，列表 table id 不帶 `a`）
+
 ### 2.3.9 — 2026-04-16
 
 - 新增：報價清單數量 AJAX 自動更新——改數量後 500ms debounce 自動送出 `update_raq`，抽換 `#yith-ywrq-table-list`，免手動按 Update List（原按鈕自動隱藏）

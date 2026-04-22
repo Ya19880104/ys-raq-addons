@@ -12,7 +12,8 @@
 	'use strict';
 
 	$(function () {
-		var $form = $('#yith-ywrq-form');
+		// YITH RAQ 表單 id 為 yith-ywraq-form（帶 a），但列表 table id 為 yith-ywrq-table-list（不帶 a）
+		var $form = $('#yith-ywraq-form');
 		if (!$form.length) {
 			return;
 		}
@@ -55,7 +56,7 @@
 				if ($newTable.length) {
 					$table.replaceWith($newTable);
 					// 新 table 中的 Update List 按鈕也要隱藏
-					$('#yith-ywrq-form').find('input[name="update_raq"]').hide();
+					$('#yith-ywraq-form').find('input[name="update_raq"]').hide();
 					showToast(i18n.updated || '已更新', 'success');
 				} else {
 					// 清單已空或結構改變，reload 比較安全
