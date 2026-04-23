@@ -148,6 +148,12 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 ## Changelog
 
+### 2.3.14 — 2026-04-23
+
+- 架構：將 `vendor/yangsheep/ys-plugin-hub-client/` 回退到與其他 YS 外掛（ys-shopline、ys-paynow-shipping、yangsheep-checkout-optimizer、ys-loco-ai-gemini）完全一致的版本。
+- **為何回退**：hub-client 主檔 `ys-plugin-hub-client.php` 有「第一個 vendor 獨贏」的防重複載入保護（`if ( defined( 'YS_HUB_CLIENT_VERSION' ) ) return;`），按 WP 載入順序（資料夾字母排序）`yangsheep-checkout-optimizer` 一定比 `ys-raq-addons` 早載入，所以 v2.3.11 改過的 `updatePlugin()` reload + timeout、`handle_update_plugin()` `set_time_limit(300)` 等改動永遠不會被執行；留著只會造成「磁碟上有新版、runtime 跑的是舊版」的除錯陷阱。回歸統一後所有 YS 外掛使用同一份 hub-client，避免版本歧義。
+- 維持：`packages/ys-plugin-hub-client/` 中央版同步回退。
+
 ### 2.3.13 — 2026-04-23
 
 - 新增：**迷你詢價車數量標籤可後台自訂**（顯示設定 → 迷你詢價車 → 「數量標籤文字」），英文站可改為 `Qty: `、日文站可改 `数量：` 等；Shortcode 亦可用 `qty_label` 屬性即時覆寫。

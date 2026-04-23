@@ -439,7 +439,6 @@
             $.ajax({
                 url: config.ajaxUrl,
                 type: 'POST',
-                timeout: 180000, // 3 分鐘安全超時
                 data: {
                     action: 'ys_hub_client_install_plugin',
                     nonce: config.nonce,
@@ -447,27 +446,19 @@
                     version: version
                 },
                 success: function (response) {
-                    if (response && response.success) {
-                        Toast.show((response.data && response.data.message) || i18n.success, 'success');
+                    if (response.success) {
+                        Toast.show(response.data.message || i18n.success, 'success');
                         // 整張卡片用回傳的 plugin data 重新渲染
-                        if (response.data && response.data.plugin) {
+                        if (response.data.plugin) {
                             Marketplace.replaceCard(slug, response.data.plugin);
-                        } else {
-                            // 沒有 plugin payload 代表無法保證資料新鮮，reload 保險
-                            setTimeout(function () { window.location.reload(); }, 800);
                         }
                     } else {
-                        var msg = (response && response.data && response.data.message) ? response.data.message : i18n.failed;
-                        Toast.show(msg, 'error');
+                        Toast.show(response.data.message || i18n.failed, 'error');
                         btn.prop('disabled', false).text(origText);
                     }
                 },
-                error: function (xhr, status) {
-                    var msg = i18n.failed;
-                    if (status === 'timeout') {
-                        msg = (i18n.installTimeout || '安裝逾時，請稍後重新整理頁面確認狀態');
-                    }
-                    Toast.show(msg, 'error');
+                error: function () {
+                    Toast.show(i18n.failed, 'error');
                     btn.prop('disabled', false).text(origText);
                 }
             });
@@ -475,10 +466,6 @@
 
         /**
          * 更新外掛
-         *
-         * 注意：外掛更新（特別是自更新）會改寫磁碟上的 PHP 檔，舊版 JS 與新版
-         * 卡片資料可能出現不一致；因此成功後一律 reload 頁面，確保新版資源
-         * 重新載入且 UI 完全對齊伺服器狀態。
          */
         updatePlugin: function (btn, slug, version) {
             var origText = btn.text();
@@ -487,7 +474,6 @@
             $.ajax({
                 url: config.ajaxUrl,
                 type: 'POST',
-                timeout: 180000, // 3 分鐘安全超時，避免 spinner 永遠停在更新中
                 data: {
                     action: 'ys_hub_client_update_plugin',
                     nonce: config.nonce,
@@ -495,22 +481,18 @@
                     version: version
                 },
                 success: function (response) {
-                    if (response && response.success) {
-                        Toast.show((response.data && response.data.message) || i18n.success, 'success');
-                        // 強制重新整理整個頁面：最穩妥，確保新 JS/PHP 被載入
-                        setTimeout(function () { window.location.reload(); }, 800);
+                    if (response.success) {
+                        Toast.show(response.data.message || i18n.success, 'success');
+                        if (response.data.plugin) {
+                            Marketplace.replaceCard(slug, response.data.plugin);
+                        }
                     } else {
-                        var msg = (response && response.data && response.data.message) ? response.data.message : i18n.failed;
-                        Toast.show(msg, 'error');
+                        Toast.show(response.data.message || i18n.failed, 'error');
                         btn.prop('disabled', false).text(origText);
                     }
                 },
-                error: function (xhr, status) {
-                    var msg = i18n.failed;
-                    if (status === 'timeout') {
-                        msg = (i18n.updateTimeout || '更新逾時，請稍後重新整理頁面確認狀態');
-                    }
-                    Toast.show(msg, 'error');
+                error: function () {
+                    Toast.show(i18n.failed, 'error');
                     btn.prop('disabled', false).text(origText);
                 }
             });
