@@ -67,6 +67,10 @@
 				// 新 Update List 按鈕若存在也要隱藏（通常不會有，保險用）
 				$('#yith-ywraq-form').find('input[name="update_raq"]').hide();
 
+				// 通知 Mini Cart 刷新 — ys-raq-mini-cart.js 已監聽此事件；
+				// 亦與 YITH 付費版 / 其他整合相容。
+				$(document).trigger('ywraq_table_reloaded');
+
 				showToast(i18n.updated || '已更新', 'success');
 			}).fail(function (jqXHR, status) {
 				if (status !== 'abort') {

@@ -149,6 +149,12 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 ## Changelog
 
+### 2.3.16 — 2026-04-23
+
+- 修正：詢價頁改數量後（`update_raq` AJAX），**Mini Cart 不會跟著刷新** —— 兩邊訊號沒對上。兩層修復：
+  - `ys-raq-quote-page.js` 成功後 `trigger('ywraq_table_reloaded')`，mini-cart.js 本來就有監聽此事件
+  - `ys-raq-mini-cart.js` 的 `ajaxComplete` 額外認得 `update_raq=1` / `update_raq_wpnonce` 關鍵字（YITH 原生 Update List 按鈕按下時也會走這條，順便涵蓋）
+
 ### 2.3.15 — 2026-04-23
 
 - 清理：Mini Cart Widget 的 `show_price` 欄位完全移除（v2.3.11 移除金額顯示時只改了渲染邏輯，Widget 後台還遺留一個勾了沒反應的「顯示價格」checkbox 誤導使用者）。影響範圍：

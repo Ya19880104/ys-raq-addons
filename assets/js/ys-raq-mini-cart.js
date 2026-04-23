@@ -361,7 +361,10 @@
 			data.indexOf('yith_ywraq_action') !== -1 ||
 			data.indexOf('ywraq_action=add_item') !== -1 ||
 			data.indexOf('ywraq_action=remove_item') !== -1 ||
-			data.indexOf('action=ys_raq_remove_item') !== -1
+			data.indexOf('action=ys_raq_remove_item') !== -1 ||
+			// 詢價頁數量更新（ys-raq-quote-page.js）或 YITH 原生 Update List 按鈕
+			data.indexOf('update_raq=1') !== -1 ||
+			data.indexOf('update_raq_wpnonce') !== -1
 		) {
 			scheduleRefresh();
 		}
