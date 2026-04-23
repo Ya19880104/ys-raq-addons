@@ -85,15 +85,16 @@
 | `button_label` | 查看詢價清單 | 按鈕標籤 |
 | `show_title_inside` | 0 | 在面板內顯示標題（1/0） |
 | `show_thumbnail` | 1 | 顯示產品縮圖（1/0） |
-| `show_price` | 1 | 顯示價格（1/0） |
 | `show_quantity` | 1 | 顯示數量（1/0） |
 | `show_variations` | 1 | 顯示變體資訊（1/0） |
 | `qty_label` | （空，讀後台設定） | 單筆品項的數量前綴字串（e.g. `Qty: `） |
 
+> ℹ️ 詢價情境不顯示金額。若需要顯示金額請勿使用 RAQ 外掛。
+
 **完整範例：**
 
 ```
-[ys_raq_mini_cart title="我的詢價車" show_thumbnail="1" show_price="1" button_label="前往詢價單"]
+[ys_raq_mini_cart title="我的詢價車" show_thumbnail="1" qty_label="Qty: " button_label="前往詢價單"]
 ```
 
 #### 詢價數量
@@ -147,6 +148,15 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 本外掛完全支援 WooCommerce High-Performance Order Storage（HPOS）。
 
 ## Changelog
+
+### 2.3.15 — 2026-04-23
+
+- 清理：Mini Cart Widget 的 `show_price` 欄位完全移除（v2.3.11 移除金額顯示時只改了渲染邏輯，Widget 後台還遺留一個勾了沒反應的「顯示價格」checkbox 誤導使用者）。影響範圍：
+  - `templates/widgets/mini-cart.php` 拿掉 `$show_price` 宣告與 `@var` docblock
+  - `YSRaqMiniCartWidget::widget() / form() / update() / get_defaults()` 全面移除
+  - `YSRaqAjax::ys_raq_refresh_mini_cart()` 停止透傳
+  - `YSRaqShortcodes` docstring 與 README shortcode 參數表移除 `show_price`
+- 相容性：舊 Widget 設定裡殘留的 `show_price` DB 值會被 `wp_parse_args` 自然忽略，不需資料遷移；詢價列表頁的 `ys_raq_show_product_price`（不同功能）維持不動。
 
 ### 2.3.14 — 2026-04-23
 

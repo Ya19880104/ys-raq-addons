@@ -22,7 +22,7 @@ class YSRaqShortcodes {
 	/**
 	 * 迷你詢價車 Shortcode
 	 *
-	 * 用法：[ys_raq_mini_cart title="詢價清單" show_thumbnail="1" show_price="1" show_quantity="1" show_variations="1" button_label="查看清單"]
+	 * 用法：[ys_raq_mini_cart title="詢價清單" show_thumbnail="1" show_quantity="1" show_variations="1" button_label="查看清單" qty_label="數量："]
 	 *
 	 * @param array|string $atts Shortcode 屬性。
 	 * @return string

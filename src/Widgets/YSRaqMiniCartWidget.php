@@ -40,7 +40,6 @@ class YSRaqMiniCartWidget extends \WP_Widget {
 		$title             = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
 		$show_title_inside = (bool) $instance['show_title_inside'];
 		$show_thumbnail    = (bool) $instance['show_thumbnail'];
-		$show_price        = (bool) $instance['show_price'];
 		$show_quantity     = (bool) $instance['show_quantity'];
 		$show_variations   = (bool) $instance['show_variations'];
 		// qty_label 為選填：空字串代表「改讀後台 option」；有值則由 shortcode/widget 覆寫
@@ -60,7 +59,6 @@ class YSRaqMiniCartWidget extends \WP_Widget {
 			'button_label'      => $instance['button_label'],
 			'show_title_inside' => $show_title_inside,
 			'show_thumbnail'    => $show_thumbnail,
-			'show_price'        => $show_price,
 			'show_quantity'     => $show_quantity,
 			'show_variations'   => $show_variations,
 			'qty_label'         => $qty_label,
@@ -112,7 +110,6 @@ class YSRaqMiniCartWidget extends \WP_Widget {
 			'button_label'      => array( 'label' => __( '按鈕標籤：', 'ys-raq-addons' ), 'type' => 'text' ),
 			'show_title_inside' => array( 'label' => __( '在面板內顯示標題', 'ys-raq-addons' ), 'type' => 'checkbox' ),
 			'show_thumbnail'    => array( 'label' => __( '顯示產品縮圖', 'ys-raq-addons' ), 'type' => 'checkbox' ),
-			'show_price'        => array( 'label' => __( '顯示價格', 'ys-raq-addons' ), 'type' => 'checkbox' ),
 			'show_quantity'     => array( 'label' => __( '顯示數量', 'ys-raq-addons' ), 'type' => 'checkbox' ),
 			'show_variations'   => array( 'label' => __( '顯示變體資訊', 'ys-raq-addons' ), 'type' => 'checkbox' ),
 		);
@@ -153,7 +150,7 @@ class YSRaqMiniCartWidget extends \WP_Widget {
 			$instance[ $field ] = wp_strip_all_tags( stripslashes( $new_instance[ $field ] ?? '' ) );
 		}
 
-		$checkbox_fields = array( 'show_title_inside', 'show_thumbnail', 'show_price', 'show_quantity', 'show_variations' );
+		$checkbox_fields = array( 'show_title_inside', 'show_thumbnail', 'show_quantity', 'show_variations' );
 		foreach ( $checkbox_fields as $field ) {
 			$instance[ $field ] = ! empty( $new_instance[ $field ] ) ? 1 : 0;
 		}
@@ -174,7 +171,6 @@ class YSRaqMiniCartWidget extends \WP_Widget {
 			'button_label'      => get_option( 'ys_raq_mini_cart_button_label', __( '查看詢價清單', 'ys-raq-addons' ) ),
 			'show_title_inside' => 0,
 			'show_thumbnail'    => 1,
-			'show_price'        => 1,
 			'show_quantity'     => 1,
 			'show_variations'   => 1,
 			'qty_label'         => '', // 空字串 = 改讀後台 option（ys_raq_mini_cart_qty_label）
