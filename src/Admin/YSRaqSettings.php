@@ -54,9 +54,13 @@ final class YSRaqSettings {
 
 		$toolbox_exists = false;
 		if ( is_array( $menu ) ) {
-			foreach ( $menu as $item ) {
+			foreach ( $menu as $menu_key => $item ) {
 				if ( isset( $item[2] ) && 'ys-toolbox' === $item[2] ) {
 					$toolbox_exists = true;
+					// 同站的舊版 Hub Client（≤2.0.2）可能先以「YS Plugin」
+					// 註冊同一 slug；統一校正為既有產品名稱（開發準則 §4）。
+					$menu[ $menu_key ][0] = __( '電商工具箱', 'ys-raq-addons' );
+					$menu[ $menu_key ][3] = __( '電商工具箱', 'ys-raq-addons' );
 					break;
 				}
 			}

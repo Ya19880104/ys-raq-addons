@@ -149,6 +149,10 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 ## Changelog
 
+### 2.3.18 — 2026-07-25
+
+- **修正：父選單正名「電商工具箱」** — Hub Client 升級 2.0.3，`ys-toolbox` 頂層選單中央統一註冊為「電商工具箱」（`dashicons-store`、位置 56，與開發準則 §4 一致）；外掛端補 label 校正，同站若有尚未更新的舊版 Hub Client（≤2.0.2 先以「YS Plugin」註冊同一 slug）也會統一改回「電商工具箱」。與其他工具箱成員外掛（結帳強化 v1.7.7+ 等）共存時無論載入順序，選單名稱、圖示與位置一致。
+
 ### 2.3.16 — 2026-04-23
 
 - 修正：詢價頁改數量後（`update_raq` AJAX），**Mini Cart 不會跟著刷新** —— 兩邊訊號沒對上。兩層修復：
