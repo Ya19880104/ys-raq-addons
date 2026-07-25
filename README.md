@@ -149,6 +149,12 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 ## Changelog
 
+### 2.3.19 — 2026-07-25
+
+- **設定頁版型收斂** — 對齊結帳強化的 1200px 寬度、頁首、頁籤、內容卡片、欄位與儲存動作列；YITH 依賴 gating、詢價欄位與報價紀錄功能不變。
+- **Hub Client 2.0.4** — 舊版 Client 先載入時仍校正 `電商工具箱` 的名稱、商店圖示與位置，並固定將「系統資訊」「聯絡我們」排在最後。
+- **發佈契約** — 新增可重跑 UI contract；測試、Composer 與內部文件透過 `export-ignore` 排除正式 ZIP。
+
 ### 2.3.18 — 2026-07-25
 
 - **修正：父選單正名「電商工具箱」** — Hub Client 升級 2.0.3，`ys-toolbox` 頂層選單中央統一註冊為「電商工具箱」（`dashicons-store`、位置 56，與開發準則 §4 一致）；外掛端補 label 校正，同站若有尚未更新的舊版 Hub Client（≤2.0.2 先以「YS Plugin」註冊同一 slug）也會統一改回「電商工具箱」。與其他工具箱成員外掛（結帳強化 v1.7.7+ 等）共存時無論載入順序，選單名稱、圖示與位置一致。

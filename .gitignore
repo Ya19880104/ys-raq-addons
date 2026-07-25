@@ -1,7 +1,10 @@
 # Dependencies
-vendor/
+vendor/*
 !vendor/autoload.php
 !vendor/yangsheep/
+!vendor/yangsheep/ys-plugin-hub-client/
+!vendor/yangsheep/ys-plugin-hub-client/**
+vendor/yangsheep/ys-plugin-hub-client/tests/
 node_modules/
 
 # IDE
