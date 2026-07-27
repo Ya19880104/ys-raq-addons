@@ -28,9 +28,10 @@ ys_raq_ui_assert(
 );
 
 ys_raq_ui_assert(
-	str_contains($loader, 'Version:     2.0.4')
-		&& str_contains($loader, 'YSToolboxMenuNormalizer'),
-	'RAQ vendors the menu-normalizing Hub Client 2.0.4',
+	str_contains($loader, 'Version:     2.0.5')
+		&& str_contains($loader, 'YSToolboxMenuNormalizer')
+		&& !str_contains($loader, 'FeaturesUtil::declare_compatibility'),
+	'RAQ vendors Hub Client 2.0.5 without a library-owned HPOS declaration',
 	$failures
 );
 

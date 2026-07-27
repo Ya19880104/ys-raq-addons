@@ -149,6 +149,10 @@ ys-raq-addons/widgets/mini-cart.php → yourtheme/ys-raq-addons/widgets/mini-car
 
 ## Changelog
 
+### 2.3.20 — 2026-07-28
+
+- **Hub Client 2.0.5**：移除 vendor library 無效的 HPOS 宣告；RAQ Addons 主外掛原有的 HPOS 相容宣告保持不變。
+
 ### 2.3.19 — 2026-07-25
 
 - **設定頁版型收斂** — 對齊結帳強化的 1200px 寬度、頁首、頁籤、內容卡片、欄位與儲存動作列；YITH 依賴 gating、詢價欄位與報價紀錄功能不變。
